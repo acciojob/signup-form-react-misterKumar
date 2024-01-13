@@ -15,6 +15,7 @@ const SignUpForm = () => {
     gender: '',
     phoneNumber: '',
     password: '',
+    err:'',
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -25,32 +26,27 @@ const SignUpForm = () => {
     // Validate form fields
     const newErrors = {};
 
-    if (!formData.name) {
-      newErrors.name = 'Name is required.';
-    } else if (!/^[a-zA-Z0-9 ]+$/.test(formData.name)) {
-      newErrors.name = 'Name is not alphanumeric.';
+    if (!formData.name || !formData.email || !formData.phoneNumber ||!formData.password) {
+      newErrors.err = 'All fields are mandatory';
+    }
+    if (!/^[a-zA-Z0-9 ]+$/.test(formData.name)) {
+      newErrors.name = 'Name is not alphanumeric';
     }
 
-    if (!formData.email) {
-      newErrors.email = 'Email is required.';
-    } else if (!formData.email.includes('@')) {
-      newErrors.email = 'Email must contain @.';
+    if (!formData.email.includes('@')) {
+      newErrors.email = 'Email must contain @';
     }
 
     if (!['male', 'female', 'other'].includes(formData.gender)) {
-      newErrors.gender = 'Please identify as male, female or others.';
+      newErrors.gender = 'Please identify as male, female or others';
     }
 
-    if (!formData.phoneNumber) {
-      newErrors.phoneNumber = 'Phone Number is required.';
-    } else if (!/^\d+$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Phone Number must contain only numbers.';
+     if (!/^\d+$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = 'Phone Number must contain only numbers';
     }
 
-    if (!formData.password) {
-      newErrors.password = 'Password is required.';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must contain at least 6 letters.';
+     if (formData.password.length < 6) {
+      newErrors.password = 'Password must contain at least 6 letters';
     }
 
     // Update error state
@@ -79,6 +75,8 @@ const SignUpForm = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <span style={{ color: 'red' }}>{errors.err}</span>
+        <br />
         <label>
           Name:
           <input
@@ -146,7 +144,7 @@ const SignUpForm = () => {
         </label>
         <span style={{ color: 'red' }}>{errors.password}</span>
         <br />
-
+       
         <button type="submit" data-testid="submit">
           Submit
         </button>
