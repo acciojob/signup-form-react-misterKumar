@@ -9,44 +9,56 @@ const SignUpForm = () => {
     password: '',
   });
 
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    gender: '',
+    phoneNumber: '',
+    password: '',
+  });
+
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Validate form fields
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phoneNumber ||
-      !formData.password
-    ) {
-      setError('All fields are mandatory.');
-      return;
+    const newErrors = {};
+
+    if (!formData.name) {
+      newErrors.name = 'Name is required.';
+    } else if (!/^[a-zA-Z0-9 ]+$/.test(formData.name)) {
+      newErrors.name = 'Name is not alphanumeric.';
     }
 
-    if (!/^[a-zA-Z0-9 ]+$/.test(formData.name)) {
-      setError('Name is not alphanumeric.');
-      return;
-    }
-
-    if (!formData.email.includes('@')) {
-      setError('Email must contain @.');
-      return;
+    if (!formData.email) {
+      newErrors.email = 'Email is required.';
+    } else if (!formData.email.includes('@')) {
+      newErrors.email = 'Email must contain @.';
     }
 
     if (!['male', 'female', 'other'].includes(formData.gender)) {
-      setError('Please identify as male, female or others.');
-      return;
+      newErrors.gender = 'Please identify as male, female or others.';
     }
 
-    if (!/^\d+$/.test(formData.phoneNumber)) {
-      setError('Phone Number must contain only numbers.');
-      return;
+    if (!formData.phoneNumber) {
+      newErrors.phoneNumber = 'Phone Number is required.';
+    } else if (!/^\d+$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = 'Phone Number must contain only numbers.';
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must contain at least 6 letters.');
+    if (!formData.password) {
+      newErrors.password = 'Password is required.';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must contain at least 6 letters.';
+    }
+
+    // Update error state
+    setErrors(newErrors);
+
+    // If there are validation errors, return without submitting
+    if (Object.values(newErrors).some((error) => error !== '')) {
+      setSubmitted(false);
       return;
     }
 
@@ -54,12 +66,14 @@ const SignUpForm = () => {
     const username = formData.email.split('@')[0];
 
     // Display welcome message
-    setError(`Hello ${username}`);
+    setErrors({}); // Clear previous error messages
+    setSubmitted(true);
+    alert(`Hello ${username}`);
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(''); // Clear previous error messages on input change
+    setErrors({ ...errors, [e.target.name]: '' }); // Clear previous error messages on input change
   };
 
   return (
@@ -75,6 +89,7 @@ const SignUpForm = () => {
             data-testid="name"
           />
         </label>
+        <span style={{ color: 'red' }}>{errors.name}</span>
         <br />
 
         <label>
@@ -87,6 +102,7 @@ const SignUpForm = () => {
             data-testid="email"
           />
         </label>
+        <span style={{ color: 'red' }}>{errors.email}</span>
         <br />
 
         <label>
@@ -102,6 +118,7 @@ const SignUpForm = () => {
             <option value="other">Other</option>
           </select>
         </label>
+        <span style={{ color: 'red' }}>{errors.gender}</span>
         <br />
 
         <label>
@@ -114,6 +131,7 @@ const SignUpForm = () => {
             data-testid="phoneNumber"
           />
         </label>
+        <span style={{ color: 'red' }}>{errors.phoneNumber}</span>
         <br />
 
         <label>
@@ -126,6 +144,7 @@ const SignUpForm = () => {
             data-testid="password"
           />
         </label>
+        <span style={{ color: 'red' }}>{errors.password}</span>
         <br />
 
         <button type="submit" data-testid="submit">
@@ -133,7 +152,7 @@ const SignUpForm = () => {
         </button>
       </form>
 
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {submitted && <h2>Hello {formData.name}</h2>}
     </div>
   );
 };
