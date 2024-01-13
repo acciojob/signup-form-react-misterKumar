@@ -4,7 +4,7 @@ const SignUpForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    gender: 'male',
+    gender: '',
     phoneNumber: '',
     password: '',
   });
@@ -29,25 +29,28 @@ const SignUpForm = () => {
     if (!formData.name || !formData.email || !formData.phoneNumber ||!formData.password) {
       newErrors.err = 'All fields are mandatory';
     }
-    if (!/^[a-zA-Z0-9 ]+$/.test(formData.name)) {
-      newErrors.name = 'Name is not alphanumeric';
+    else{
+      if (!/^[a-zA-Z0-9 ]+$/.test(formData.name)) {
+        newErrors.name = 'Name is not alphanumeric';
+      }
+  
+      if (!formData.email.includes('@')) {
+        newErrors.email = 'email must contain @';
+      }
+  
+      if (!['male', 'female', 'other'].includes(formData.gender)) {
+        newErrors.gender = 'Please identify as male, female or others';
+      }
+  
+      if (!/^\d+$/.test(formData.phoneNumber)) {
+        newErrors.phoneNumber = 'Phone Number must contain only numbers';
+      }
+  
+      if (formData.password.length < 6) {
+        newErrors.password = 'Password must contain atleast 6 letters';
+      }
     }
-
-    if (!formData.email.includes('@')) {
-      newErrors.email = 'Email must contain @';
-    }
-
-    if (!['male', 'female', 'other'].includes(formData.gender)) {
-      newErrors.gender = 'Please identify as male, female or others';
-    }
-
-     if (!/^\d+$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Phone Number must contain only numbers';
-    }
-
-     if (formData.password.length < 6) {
-      newErrors.password = 'Password must contain at least 6 letters';
-    }
+     
 
     // Update error state
     setErrors(newErrors);
@@ -111,6 +114,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             data-testid="gender"
           >
+            <option value="sp"></option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
