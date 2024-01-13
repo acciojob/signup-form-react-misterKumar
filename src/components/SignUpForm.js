@@ -114,13 +114,14 @@ const SignUpForm = () => {
             onChange={handleChange}
             data-testid="gender"
           >
-            <option value="sp"></option>
+            <option value=""></option>
             <option value="male">Male</option>
             <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="other">Other</option>  
           </select>
+          <span style={{ color: 'red' }}>{errors.gender}</span>
         </label>
-        <span style={{ color: 'red' }}>{errors.gender}</span>
+        
         <br />
 
         <label>
