@@ -8,7 +8,7 @@ const App = () => {
     phoneNumber: "",
     password: "",
   });
-  const [selectedOption, setSelectedOption] = useState("Select gender");
+  const [selectedOption, setSelectedOption] = useState("Male");
 
   const [error, setError] = useState("");
   const [succes, setSucces] = useState("");
@@ -119,7 +119,7 @@ const App = () => {
         Submit button{" "}
       </button>
       {error && <span>{error}</span>}
-      {succes && <h2>Hello<span>{succes}</span></h2>}
+      {succes && <h2>Hello {succes}</h2>}
     </div>
   );
 };
